@@ -54,7 +54,7 @@ var templates = {
 
 
 function printInfraBotVersion() {
-	let message = 'InfraBot version: ' + VERSION;
+	let message = 'InfraBot installed version: ' + VERSION;
 	return message;
 }
 

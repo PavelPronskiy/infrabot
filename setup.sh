@@ -31,7 +31,8 @@ function __infrabot_install() {
 
 	npm install
 	
-	# node -v
+	mv .env.example .env
+	node ./logic.js -m version
 	# node ${BASEPATH_DIR}
 
 }
