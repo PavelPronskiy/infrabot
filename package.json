@@ -1,0 +1,21 @@
+{
+  "name": "infra-manager",
+  "version": "0.1.0",
+  "description": "Infrastructure bot manager",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "dotenv": "^5.0.1",
+    "fs": "0.0.1-security",
+    "ping": "^0.2.2",
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2",
+    "stdio": "^0.2.7",
+    "telebot": "^1.2.6"
+  }
+}

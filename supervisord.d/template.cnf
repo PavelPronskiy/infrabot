@@ -1,0 +1,8 @@
+[program:infrabot]
+command=_NODEPATH_ _BASEDIR_/logic.js -m server start
+directory=_BASEDIR_
+autostart=true
+autorestart=true
+stdout_logfile=_BASEDIR_/log/infrabot.log
+redirect_stderr=true
+user=_USER_
