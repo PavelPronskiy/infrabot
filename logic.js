@@ -4,20 +4,19 @@
  *
  */
 
+const VERSION = '0.1.0';
 
 require('dotenv').config();
 
-
-var stdio = require('stdio');
-
+const stdio = require('stdio');
 const execSync = require('child_process').execSync;
-var requestp = require('request-promise');
-var teleBotInstance = require('telebot');
+const requestp = require('request-promise');
+const teleBotInstance = require('telebot');
 
 const hostname = execSync('hostname');
 
 // telegram instance
-var telebot = new teleBotInstance({
+const telebot = new teleBotInstance({
 	token: process.env.MY_TOKEN,
 	usePlugins: ['commandButton'],
 	polling: {
@@ -30,7 +29,7 @@ var telebot = new teleBotInstance({
 });
 
 // cli params
-var getopt = stdio.getopt({
+const getopt = stdio.getopt({
 	method: {
 		key: 'm',
 		args: 2,
@@ -54,6 +53,10 @@ var templates = {
 }
 
 
+function printInfraBotVersion() {
+	let message = 'InfraBot version: ' + VERSION;
+	return message;
+}
 
 function printTelebotHelp(msg) {
 
@@ -72,12 +75,19 @@ telebot.on(['/help'], function(msg) {
 	return printTelebotHelp(msg);
 });
 
+telebot.on(['/version'], function(msg) {
+	let message = printInfraBotVersion();
+	return telebot.sendMessage(msg.chat.id, message, {
+		replyToMessage: msg.message_id,
+		parseMode: 'Markdown'
+	});
+});
+
 if (typeof getopt.method === 'undefined') {
 	// console.log('No defined option args');
 	getopt.printHelp();
 	return process.exit(1);
 }
-
 
 var telePing = require('./modules/telePing');
 var uptime = require('./modules/uptime');
@@ -86,6 +96,9 @@ telePing(telebot);
 uptime(telebot);
 
 switch(getopt.method[0]) {
+	case 'version':
+			printInfraBotVersion();
+		break;
 	case 'server':
 		switch(getopt.method[1]) {
 			case 'start':

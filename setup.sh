@@ -45,5 +45,8 @@ case "$1" in
 		[ -d "${PWD}/supervisord.d/infrabot.conf" ] && rm -rf ${PWD}/supervisord.d/infrabot.conf
 		echo "Uninstall success"
 	;;
+	*)
+		$0 install
+	;;
 esac
 
