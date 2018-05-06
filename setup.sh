@@ -7,15 +7,19 @@ NODEJS_ARCH="x64"
 NODEJS_VER="v10.0.0"
 
 function __infrabot_install() {
+	git clone https://github.com/PavelPronskiy/infrabot.git
+	cd infrabot/
 	mkdir -p node/ bin/ log/
 	cd node/
 	echo "Installing nodejs ${NODEJS_VER}"
 	wget -qO- https://nodejs.org/dist/latest-v10.x/node-v10.0.0-linux-${NODEJS_ARCH}.tar.xz | tar Jx
-	ln -s $PWD/node-v10.0.0-linux-${NODEJS_ARCH}/bin/node ${PWD_DIR}/bin/node
-	ln -s $PWD/node-v10.0.0-linux-${NODEJS_ARCH}/lib/node_modules/npm/bin/npm-cli.js ${PWD_DIR}/bin/npm
-	ln -s $PWD/node-v10.0.0-linux-${NODEJS_ARCH}/lib/node_modules/npm/bin/npx-cli.js ${PWD_DIR}/bin/npx
+	ln -s $PWD/node-v10.0.0-linux-${NODEJS_ARCH}/bin/node ../bin/node
+	ln -s $PWD/node-v10.0.0-linux-${NODEJS_ARCH}/lib/node_modules/npm/bin/npm-cli.js ../bin/npm
+	ln -s $PWD/node-v10.0.0-linux-${NODEJS_ARCH}/lib/node_modules/npm/bin/npx-cli.js ../bin/npx
 
 	export PATH="${PATH}:${PWD_DIR}/bin"
+
+	cd ../
 
 	node -v
 
