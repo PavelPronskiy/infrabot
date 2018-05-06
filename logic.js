@@ -83,6 +83,17 @@ telebot.on(['/version'], function(msg) {
 	});
 });
 
+telebot.on(['/update'], function(msg) {
+	const gitpull = execSync('git status');
+	let message = '```' + gitpull + '```';
+	console.log(gitpull);
+	// let message = printInfraBotVersion();
+	return telebot.sendMessage(msg.chat.id, message, {
+		replyToMessage: msg.message_id,
+		parseMode: 'Markdown'
+	});
+});
+
 if (typeof getopt.method === 'undefined') {
 	// console.log('No defined option args');
 	getopt.printHelp();
