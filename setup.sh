@@ -7,6 +7,12 @@ NODEJS_ARCH="x64"
 NODEJS_VER="v10.0.0"
 
 function __infrabot_install() {
+
+	which git > /dev/null 2>&1 || {
+		echo "Please install git"
+		exit 1
+	}
+
 	git clone https://github.com/PavelPronskiy/infrabot.git
 	cd infrabot/
 	mkdir -p node/ bin/ log/
@@ -32,7 +38,10 @@ function __infrabot_install() {
 	npm install
 	
 	mv .env.example .env
-	node ./logic.js -m version
+	
+	echo "Need to edit settings:"
+	cat .env
+	#node ./logic.js -m version
 	# node ${BASEPATH_DIR}
 
 }
