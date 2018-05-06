@@ -1,10 +1,12 @@
 #!/bin/bash
 
-BASEPATH_DIR="/opt/infrabot"
 PWD_DIR=$PWD
+ARCH=$(uname -m)
 
 NODEJS_ARCH="x64"
 NODEJS_VER="v10.0.0"
+
+
 
 function __infrabot_install() {
 
@@ -12,6 +14,12 @@ function __infrabot_install() {
 		echo "Please install git"
 		exit 1
 	}
+
+	case "${ARCH}" in
+		x86_64) NODEJS_ARCH="x64" ;;
+		armv7l) NODEJS_ARCH="armv7l" ;;
+		armv6l) NODEJS_ARCH="armv6l" ;;
+	esac
 
 	git clone https://github.com/PavelPronskiy/infrabot.git
 	cd infrabot/
