@@ -18,7 +18,8 @@ const hostname = execSync('hostname');
 // telegram instance
 const telebot = new teleBotInstance({
 	token: process.env.MY_TOKEN,
-	usePlugins: ['commandButton'],
+	pluginFolder: __dirname + '/modules/',
+	usePlugins: ['uptime', 'update', 'ping'],
 	polling: {
 		interval: 1000,
 		timeout: 0,
@@ -38,20 +39,6 @@ const getopt = stdio.getopt({
 			"\t" + '-m server stop' + "\n"
 	}
 });
-
-
-var templates = {
-	setTelegramNotice: function(o) {
-		return '[' + o.sms.date + '] ' +
-		'*Новое SMS(' + o.sms.id + ') сообщение' + '*' + "\n" +
-		'Модель модема: *' + o.modem.hardware + '*' + "\n" +
-		'Номер модема: *' + o.modem.phone + '*' + "\n" +
-		'Отправитель: *' + o.sms.subject + '*' + "\n" +
-		'Сообщение:' + "\n" +
-		'```' + o.sms.text + '```';;
-	}
-}
-
 
 function printInfraBotVersion() {
 	let message = 'InfraBot installed version: ' + VERSION;
@@ -83,16 +70,6 @@ telebot.on(['/version'], function(msg) {
 	});
 });
 
-telebot.on(['/update'], function(msg) {
-	const gitpull = execSync('git status');
-	let message = '```' + gitpull + '```';
-	console.log(gitpull);
-	// let message = printInfraBotVersion();
-	return telebot.sendMessage(msg.chat.id, message, {
-		replyToMessage: msg.message_id,
-		parseMode: 'Markdown'
-	});
-});
 
 if (typeof getopt.method === 'undefined') {
 	// console.log('No defined option args');
@@ -100,12 +77,13 @@ if (typeof getopt.method === 'undefined') {
 	return process.exit(1);
 }
 
-var telePing = require('./modules/telePing');
+
+/*var telePing = require('./modules/telePing');
 var uptime = require('./modules/uptime');
 
 telePing(telebot);
 uptime(telebot);
-
+*/
 switch(getopt.method[0]) {
 	case 'version':
 			printInfraBotVersion();
