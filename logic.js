@@ -88,7 +88,9 @@ switch(getopt.method) {
 			printInfraBotVersion();
 		break;
 	case 'run':
-		var message = 'Host ' + '*' + hostname + '*' + ' reported: infrabot online';
+		var message = 'Host ' + '*' + hostname + '*' + ' reported: infrabot online' + "\n"
+			'infrabot version: ' + VERSION;
+
 		telebot.sendMessage(process.env.CHAT_ID, message, {
 			parseMode: 'Markdown'
 		});
