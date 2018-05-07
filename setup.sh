@@ -7,8 +7,14 @@ NODEJS_ARCH="x64"
 NODEJS_VER="v10.0.0"
 
 function __infrabot_update() {
-	echo "Updating infrabot $(hostname)"
-	git pull
+	local version=$(grep 'const VERSION.*' logic.js | awk '{print $4}' | sed "s|'||g;s|;||g")
+	# echo "Updating infrabot $(hostname)"
+	LANG=C git fetch && \
+	LANG=C git status | grep -q 'Your branch is behind' && \
+	git merge && \
+		echo "New infrabot version: ${version}" || \
+		echo "Cannot update infrabot"
+
 	return 0
 }
 
@@ -24,6 +30,7 @@ function __infrabot_install() {
 		echo "Please install git"
 		exit 1
 	}
+
 
 	case "${ARCH}" in
 		x86_64) NODEJS_ARCH="x64" ;;
@@ -44,7 +51,7 @@ function __infrabot_install() {
 	export PATH="${PATH}:${PWD_DIR}/bin"
 
 	# echo "${HOME}"
-
+ 	
 
 	if [ -f ~/.bashrc ]
 	then
@@ -55,9 +62,6 @@ function __infrabot_install() {
 	fi
 
 	cd ../
-
-	echo -ne "Installed nodejs version: "
-	node -v
 
 	# echo "Setup supervisord configuration file: ${PWD}/supervisord.d/infrabot.conf"
 	# sed -e "s|_BASEDIR_|${PWD}|g" \
