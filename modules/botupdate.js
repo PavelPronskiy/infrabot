@@ -13,7 +13,7 @@ module.exports = {
 		// var execSync = require('child_process').execSync;
 		const childProcess = require('child_process');
         
-		bot.on(['/botupdate'], function(msg) {
+		bot.on(['/update'], function(msg) {
 			
 			// var hostname = execSync('hostname');
 			var method = msg.text.split(' ');
