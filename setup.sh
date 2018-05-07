@@ -45,14 +45,13 @@ function __infrabot_install() {
 
 	# echo "${HOME}"
 
-	if [ -f ~/infrabot/.env.node ]
-	then
-		. ~/infrabot/.env.node
-	fi
 
 	if [ -f ~/.bashrc ]
 	then
-		grep -q '.env.node' ~/.bashrc || echo ". ~/infrabot/.env.node" >> ~/.bashrc
+		grep -q '.env.node' ~/.bashrc || {
+			echo ". ~/infrabot/.env.node" >> ~/.bashrc
+			. ~/.bashrc
+		}
 	fi
 
 	cd ../
