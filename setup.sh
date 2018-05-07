@@ -47,11 +47,11 @@ function __infrabot_install() {
 
 	node -v
 
-	echo "Setup supervisord configuration file: ${PWD}/supervisord.d/infrabot.conf"
-	sed -e "s|_BASEDIR_|${PWD}|g" \
-		-e "s|_NODEPATH_|${PWD}/bin/node|g" \
-		-e "s|_USER_|${USER}|g" \
-		${PWD}/supervisord.d/template.cnf > ${PWD}/supervisord.d/infrabot.conf
+	# echo "Setup supervisord configuration file: ${PWD}/supervisord.d/infrabot.conf"
+	# sed -e "s|_BASEDIR_|${PWD}|g" \
+	# 	-e "s|_NODEPATH_|${PWD}/bin/node|g" \
+	# 	-e "s|_USER_|${USER}|g" \
+	# 	${PWD}/supervisord.d/template.cnf > ${PWD}/supervisord.d/infrabot.conf
 
 	npm install
 	

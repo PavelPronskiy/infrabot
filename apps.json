@@ -1,0 +1,11 @@
+{
+	"apps": [{
+		"name"			: "infrabot",
+		"script"		: "logic.js",
+		"error_file"		: "/opt/infrabot/infrabot/log/infrabot-error.log",
+		"out_file"		: "/opt/infrabot/infrabot/log/infrabot.log",
+		"args"			: "-m run",
+		"watch"			: true,
+		"cwd"			: "/opt/infrabot/infrabot"
+	}]
+}

@@ -33,10 +33,9 @@ const telebot = new teleBotInstance({
 const getopt = stdio.getopt({
 	method: {
 		key: 'm',
-		args: 2,
+		args: 1,
 		description: "\n\n" + 'method' + "\n" +
-			"\t" + '-m server start' + "\n" +
-			"\t" + '-m server stop' + "\n"
+			"\t" + '-m run' + "\n"
 	}
 });
 
@@ -84,11 +83,21 @@ var uptime = require('./modules/uptime');
 telePing(telebot);
 uptime(telebot);
 */
-switch(getopt.method[0]) {
+switch(getopt.method) {
 	case 'version':
 			printInfraBotVersion();
 		break;
-	case 'server':
+	case 'run':
+		var message = 'Host ' + '*' + hostname + '*' + ' reported: infrabot online';
+		telebot.sendMessage(process.env.CHAT_ID, message, {
+			parseMode: 'Markdown'
+		});
+
+		console.log(message);
+		telebot.start();
+	break;
+
+/*	case 'server':
 		switch(getopt.method[1]) {
 			case 'start':
 				var message = 'Host ' + '*' + hostname + '*' + ' reported: infrabot online';
@@ -105,7 +114,7 @@ switch(getopt.method[0]) {
 				process.exit(-1);
 			break;
 		}
-	break;
+	break;*/
 	default: getopt.printHelp();
 }
 
