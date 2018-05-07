@@ -6,7 +6,16 @@ ARCH=$(uname -m)
 NODEJS_ARCH="x64"
 NODEJS_VER="v10.0.0"
 
+function __infrabot_update() {
+	echo "update setup.sh $PWD"
 
+}
+
+function __infrabot_status() {
+	echo "Getting update status"
+	echo "$PWD"
+	git status
+}
 
 function __infrabot_install() {
 
@@ -70,6 +79,8 @@ function __infrabot_uninstall() {
 
 case "$1" in
 	install)	__infrabot_install ;;
+	update)	__infrabot_update ;;
+	status)	__infrabot_status ;;
 	uninstall)	__infrabot_uninstall ;;
 	*)		__infrabot_install ;;
 esac

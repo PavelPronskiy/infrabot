@@ -19,7 +19,7 @@ const hostname = execSync('hostname');
 const telebot = new teleBotInstance({
 	token: process.env.MY_TOKEN,
 	pluginFolder: __dirname + '/modules/',
-	usePlugins: ['uptime', 'update', 'ping'],
+	usePlugins: ['uptime', 'botupdate', 'ping'],
 	polling: {
 		interval: 1000,
 		timeout: 0,

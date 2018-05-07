@@ -6,3 +6,4 @@ autorestart=true
 stdout_logfile=_BASEDIR_/log/infrabot.log
 redirect_stderr=true
 user=_USER_
+environment=USER="infrabot",HOME="_BASEDIR_"
