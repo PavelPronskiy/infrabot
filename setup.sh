@@ -43,12 +43,14 @@ function __infrabot_install() {
 
 	export PATH="${PATH}:${PWD_DIR}/bin"
 
-	if [ -f "~/.bashrc" ]
+	echo "${HOME}"
+
+	if [ -f ~/.bashrc ]
 	then
 		echo '. ~/infrabot/.env.node' >> ~/.bashrc
 	fi
 
-	if [ -f "~/.bash_profile" ]
+	if [ -f ~/.bash_profile ]
 	then
 		echo '. ~/infrabot/.env.node' >> ~/.bash_profile
 	fi
