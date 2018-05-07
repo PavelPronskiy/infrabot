@@ -73,8 +73,20 @@ function __infrabot_install() {
 	
 	cp -p .env.example .env
 	
-	echo "Need to edit settings:"
+	echo "Need to edit settings"
 	cat .env
+	echo
+	echo "Need root privileges to execute generated pm2 autostart command line"
+	pm2 startup
+	echo
+	pm2 start apps.json
+	pm2 stop infrabot
+	pm2 start infrabot
+	pm2 save
+
+	echo "Infrabot installed"
+	echo "You need edit ~/infrabot/.env file and restart pm2 infrabot instance"
+
 	#node ./logic.js -m version
 	# node ${BASEPATH_DIR}
 

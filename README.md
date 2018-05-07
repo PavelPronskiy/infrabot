@@ -11,6 +11,8 @@ $ cd /opt/infrabot
 $ wget -qO- https://raw.githubusercontent.com/PavelPronskiy/infrabot/master/setup.sh?$(date +%s) | bash
 $ pm2 startup
 $ pm2 start apps.json
+$ pm2 stop infrabot
+# pm2 start infrabot
 $ pm2 save
 ```
 
