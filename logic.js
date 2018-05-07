@@ -4,7 +4,7 @@
  *
  */
 
-const VERSION = '0.1.3';
+const VERSION = '0.1.4';
 
 require('dotenv').config();
 
@@ -76,17 +76,7 @@ if (typeof getopt.method === 'undefined') {
 	return process.exit(1);
 }
 
-
-/*var telePing = require('./modules/telePing');
-var uptime = require('./modules/uptime');
-
-telePing(telebot);
-uptime(telebot);
-*/
 switch(getopt.method) {
-	case 'version':
-			printInfraBotVersion();
-		break;
 	case 'run':
 		var message = 'Host ' + '*' + hostname + '*' + ' reported: infrabot online' + "\n"
 			'infrabot version: ' + VERSION;
@@ -98,25 +88,6 @@ switch(getopt.method) {
 		console.log(message);
 		telebot.start();
 	break;
-
-/*	case 'server':
-		switch(getopt.method[1]) {
-			case 'start':
-				var message = 'Host ' + '*' + hostname + '*' + ' reported: infrabot online';
-				telebot.sendMessage(process.env.CHAT_ID, message, {
-					parseMode: 'Markdown'
-				});
-
-				console.log(message);
-				telebot.start();
-			break;
-			case 'stop':
-				console.log('stopping server');
-				telebot.stop();
-				process.exit(-1);
-			break;
-		}
-	break;*/
 	default: getopt.printHelp();
 }
 
