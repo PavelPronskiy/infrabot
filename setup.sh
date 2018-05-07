@@ -19,8 +19,10 @@ function __infrabot_update() {
 }
 
 function __infrabot_status() {
-	echo "Getting update status $(hostname)"
-	git status
+	git fetch > /dev/null
+	git status | grep -q 'Your branch is behind' && \
+		echo "Found new updates!" || \
+		echo "No new updates found."
 	return 0
 }
 
