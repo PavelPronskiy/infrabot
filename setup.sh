@@ -13,8 +13,8 @@ function __infrabot_update() {
 
 function __infrabot_status() {
 	echo "Getting update status"
-	echo "$PWD"
 	git status
+	return 0
 }
 
 function __infrabot_install() {

@@ -24,27 +24,27 @@ module.exports = {
 					case 'status':
 						
 						childProcess.exec('bash ./setup.sh status', function (error, stdout, stderr) {
-							console.log('stdout: ' + stdout);
-							console.log('stderr: ' + stderr);
+							/*console.log('stdout: ' + stdout);
+							console.log('stderr: ' + stderr);*/
 
-							if (stderr !== null) {
+							/*if (stderr !== null) {
 								var message = '``` ' + stderr + ' ```';
 								return bot.sendMessage(msg.chat.id, message, {
 									replyToMessage: msg.message_id,
 									parseMode: 'Markdown'
 								});
 							} else {
+*/
+							var message = '``` ' + stdout + ' ```';
+							return bot.sendMessage(msg.chat.id, message, {
+								replyToMessage: msg.message_id,
+								parseMode: 'Markdown'
+							});
 
-								var message = '``` ' + stdout + ' ```';
-								return bot.sendMessage(msg.chat.id, message, {
-									replyToMessage: msg.message_id,
-									parseMode: 'Markdown'
-								});
-
-							}
+							// }
 
 						}, {
-							shell: true,
+							stdio: 'inherit',
 							cwd: '/opt/infrabot/infrabot'
 						});
 
