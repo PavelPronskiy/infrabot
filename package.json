@@ -1,8 +1,8 @@
 {
-  "name": "infra-manager",
+  "name": "infrabot",
   "version": "0.1.0",
   "description": "Infrastructure bot manager",
-  "main": "index.js",
+  "main": "logic.js",
   "scripts": {
     "test": "test"
   },
