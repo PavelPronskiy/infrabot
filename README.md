@@ -6,14 +6,18 @@ Need to install supervisor
 
 # Installation
 ```bash
+$ useradd -d /opt/infrabot infrabot
+$ cd /opt/infrabot
 $ wget -qO- https://raw.githubusercontent.com/PavelPronskiy/infrabot/master/setup.sh?$(date +%s) | bash
+$ pm2 startup
+$ pm2 start apps.json
+$ pm2 save
 ```
 
-# setup
+# System autostart
+Need root privileges to make links nodejs binaries.
 ```bash
-sudo ln -s $PWD/supervisord.d/infrabot.conf /etc/supervisord.d/infrabot.conf
-
-supervisorctl start infrabot
-
+ln -s /opt/infrabot/infrabot/bin/node /usr/bin/node
 ```
+
 
