@@ -55,7 +55,7 @@ function __infrabot_install() {
 
 	npm install
 	
-	mv .env.example .env
+	cp -p .env.example .env
 	
 	echo "Need to edit settings:"
 	cat .env
