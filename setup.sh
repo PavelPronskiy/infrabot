@@ -7,12 +7,13 @@ NODEJS_ARCH="x64"
 NODEJS_VER="v10.0.0"
 
 function __infrabot_update() {
-	echo "update setup.sh $PWD"
-
+	echo "Updating infrabot $(hostname)"
+	git pull
+	return 0
 }
 
 function __infrabot_status() {
-	echo "Getting update status"
+	echo "Getting update status $(hostname)"
 	git status
 	return 0
 }
