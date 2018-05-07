@@ -24,26 +24,11 @@ module.exports = {
 					case 'status':
 						
 						childProcess.exec('bash ./setup.sh status', function (error, stdout, stderr) {
-							/*console.log('stdout: ' + stdout);
-							console.log('stderr: ' + stderr);*/
-
-							/*if (stderr !== null) {
-								var message = '``` ' + stderr + ' ```';
-								return bot.sendMessage(msg.chat.id, message, {
-									replyToMessage: msg.message_id,
-									parseMode: 'Markdown'
-								});
-							} else {
-*/
-
 							var message = '``` ' + stdout + ' ```';
 							return bot.sendMessage(msg.chat.id, message, {
 								replyToMessage: msg.message_id,
 								parseMode: 'Markdown'
 							});
-
-							// }
-
 						}, {
 							stdio: 'inherit',
 							cwd: '/opt/infrabot/infrabot'
@@ -53,31 +38,17 @@ module.exports = {
 						// console.log(execSync('bash ' + __dirname + '/../setup.sh update'));
 					case 'now':
 						childProcess.exec('bash ./setup.sh update', function (error, stdout, stderr) {
-							console.log('stdout: ' + stdout);
-							console.log('stderr: ' + stderr);
-
-							if (stderr !== null) {
-								var message = '``` ' + stderr + ' ```';
-								return bot.sendMessage(msg.chat.id, message, {
-									replyToMessage: msg.message_id,
-									parseMode: 'Markdown'
-								});
-							} else {
-
-								var message = '``` ' + stdout + ' ```';
-								return bot.sendMessage(msg.chat.id, message, {
-									replyToMessage: msg.message_id,
-									parseMode: 'Markdown'
-								});
-
-							}
-
+							var message = '``` ' + stdout + ' ```';
+							return bot.sendMessage(msg.chat.id, message, {
+								replyToMessage: msg.message_id,
+								parseMode: 'Markdown'
+							});
 						}, {
-							shell: true,
+							stdio: 'inherit',
 							cwd: '/opt/infrabot/infrabot'
 						});
 
-					// break;
+					break;
 				}
 				
 			/*} else {
