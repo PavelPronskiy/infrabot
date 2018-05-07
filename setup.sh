@@ -84,4 +84,4 @@ case "$1" in
 	uninstall)	__infrabot_uninstall ;;
 	*)		__infrabot_install ;;
 esac
-
+exit 0
