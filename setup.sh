@@ -43,7 +43,7 @@ function __infrabot_install() {
 
 	export PATH="${PATH}:${PWD_DIR}/bin"
 
-	echo '. ~/infrabot/.env.node' >> ${HOME}/.bashrc
+	echo '. ~/infrabot/.env.node' >> ~/.bashrc
 
 	cd ../
 
