@@ -56,6 +56,7 @@ function __infrabot_install() {
 
 	cd ../
 
+	echo -ne "Installed nodejs version: "
 	node -v
 
 	# echo "Setup supervisord configuration file: ${PWD}/supervisord.d/infrabot.conf"
