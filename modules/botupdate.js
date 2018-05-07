@@ -41,20 +41,22 @@ module.exports = {
 					break;
 					case 'now':
 						childProcess.exec('bash ./setup.sh update', function (error, stdout, stderr) {
-							var message = '``` ' + stdout + ' ```';
 
-							childProcess.exec(config.nodeModulesBinPath + '/pm2 reload infrabot', function (error, stdout, stderr) {
-								var cmessage = '``` ' + stdout + ' ```';
-								console.log('infrabot process reloaded');
-								return bot.sendMessage(msg.chat.id, cmessage, {
-									replyToMessage: msg.message_id,
-									parseMode: 'Markdown'
+							if (stdout.match(/New infrabot version/)) {
+								childProcess.exec(config.nodeModulesBinPath + '/pm2 reload infrabot', function (error, stdout, stderr) {
+									var cmessage = '``` ' + stdout + ' ```';
+									console.log('infrabot process reloaded');
+									return bot.sendMessage(msg.chat.id, cmessage, {
+										replyToMessage: msg.message_id,
+										parseMode: 'Markdown'
+									});
+								}, {
+									stdio: 'inherit',
+									cwd: config.basePath
 								});
-							}, {
-								stdio: 'inherit',
-								cwd: config.basePath
-							});
+							}
 
+							var message = '``` ' + stdout + ' ```';
 							return bot.sendMessage(msg.chat.id, message, {
 								replyToMessage: msg.message_id,
 								parseMode: 'Markdown'
