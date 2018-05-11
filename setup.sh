@@ -15,6 +15,9 @@ function __infrabot_update() {
 		echo "New infrabot version: ${version}" || \
 		echo "No new updates found"
 
+	echo "Check npm packages updates"
+	LANG=C npm update
+
 	return 0
 }
 
@@ -23,6 +26,7 @@ function __infrabot_status() {
 	git status | grep -q 'Your branch is behind' && \
 		echo "Found new updates!" || \
 		echo "No new updates found."
+
 	return 0
 }
 
