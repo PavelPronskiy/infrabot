@@ -1,5 +1,5 @@
 /*
-    ICMP ping
+    infrabot ICMP ping
 */
 
 module.exports = {

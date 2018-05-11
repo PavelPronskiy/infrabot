@@ -43,10 +43,10 @@ module.exports = {
 						childProcess.exec('bash ./setup.sh update', function (error, stdout, stderr) {
 
 							if (stdout.match(/New infrabot version/g)) {
-								childProcess.exec(config.nodeModulesBinPath + '/pm2 reload infrabot', function (error, stdout, stderr) {
+								return childProcess.exec(config.nodeModulesBinPath + '/pm2 reload infrabot', function (error, stdout, stderr) {
 									var cmessage = '``` ' + stdout + ' ```';
 									console.log('infrabot process reloaded');
-									return bot.sendMessage(msg.chat.id, cmessage, {
+									bot.sendMessage(msg.chat.id, cmessage, {
 										replyToMessage: msg.message_id,
 										parseMode: 'Markdown'
 									});

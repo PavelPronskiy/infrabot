@@ -19,7 +19,7 @@ const hostname = execSync('hostname');
 const telebot = new teleBotInstance({
 	token: process.env.MY_TOKEN,
 	pluginFolder: __dirname + '/modules/',
-	usePlugins: ['uptime', 'botupdate', 'ping'],
+	usePlugins: process.env.INFRABOT_PLUGINS,
 	polling: {
 		interval: 1000,
 		timeout: 0,
@@ -40,13 +40,13 @@ const getopt = stdio.getopt({
 });
 
 function printInfraBotVersion() {
-	let message = 'InfraBot installed version: ' + VERSION;
+	var message = 'InfraBot installed version: ' + VERSION;
 	return message;
 }
 
 function printTelebotHelp(msg) {
 
-	let message = "\n" +
+	var message = "\n" +
 	'/uptime - get uptime' + "\n" +
 	'/ping google.com - ping target host' + "\n" +
 	'/help' + "\n";
@@ -62,7 +62,7 @@ telebot.on(['/help'], function(msg) {
 });
 
 telebot.on(['/version'], function(msg) {
-	let message = printInfraBotVersion();
+	var message = printInfraBotVersion();
 	return telebot.sendMessage(msg.chat.id, message, {
 		replyToMessage: msg.message_id,
 		parseMode: 'Markdown'
@@ -78,7 +78,7 @@ if (typeof getopt.method === 'undefined') {
 
 switch(getopt.method) {
 	case 'run':
-		var message = 'Host ' + '*' + hostname + '*' + ' reported: infrabot online' + "\n"
+		var message = 'Host ' + '*' + hostname + '*' + ' reported: infrabot online' + "\n" +
 			'infrabot version: ' + VERSION;
 
 		telebot.sendMessage(process.env.CHAT_ID, message, {

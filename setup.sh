@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PWD_DIR=$PWD
+BASE_DIR="${BASE_DIR}"
 ARCH=$(uname -m)
 
 NODEJS_ARCH="x64"
@@ -13,7 +13,7 @@ function __infrabot_update() {
 	LANG=C git status | grep -q 'Your branch is behind' && \
 	git merge && \
 		echo "New infrabot version: ${version}" || \
-		echo "Cannot update infrabot"
+		echo "No new updates found"
 
 	return 0
 }
@@ -40,7 +40,16 @@ function __infrabot_install() {
 		armv6l) NODEJS_ARCH="armv6l" ;;
 	esac
 
+	id infrabot > /dev/null 2>&1 || useradd -d ${BASE_DIR} infrabot
+	cd ${BASE_DIR}
 	git clone https://github.com/PavelPronskiy/infrabot.git
+
+	if [ ! -d "${BASE_DIR}/infrabot" ]
+	then
+			echo "${BASE_DIR}/infrabot directory not found"
+			exit 1
+	fi
+
 	cd infrabot/
 	mkdir -p node/ bin/ log/
 	cd node/
@@ -54,26 +63,20 @@ function __infrabot_install() {
 
 	# echo "${HOME}"
  	
-
-	if [ -f ~/.bashrc ]
-	then
-		grep -q '.env.node' ~/.bashrc || {
-			echo ". ~/infrabot/.env.node" >> ~/.bashrc
-			. ~/.bashrc
-		}
-	fi
-
-	cd ../
-
-	# echo "Setup supervisord configuration file: ${PWD}/supervisord.d/infrabot.conf"
-	# sed -e "s|_BASEDIR_|${PWD}|g" \
-	# 	-e "s|_NODEPATH_|${PWD}/bin/node|g" \
-	# 	-e "s|_USER_|${USER}|g" \
-	# 	${PWD}/supervisord.d/template.cnf > ${PWD}/supervisord.d/infrabot.conf
+	cd ${BASE_DIR}/infrabot
 
 	npm install
 	
 	cp -p .env.example .env
+
+	if [ -f ${BASE_DIR}/.bashrc ]
+	then
+		grep -q '.env.node' ${BASE_DIR}/.bashrc || {
+			echo ". ~/infrabot/.env.node" >> ${BASE_DIR}/.bashrc
+			. ${BASE_DIR}/.bashrc
+		}
+	fi
+
 	
 	echo "Need to edit settings"
 	cat .env
@@ -110,9 +113,9 @@ function __infrabot_uninstall() {
 
 case "$1" in
 	install)	__infrabot_install ;;
-	update)	__infrabot_update ;;
-	status)	__infrabot_status ;;
+	update)		__infrabot_update ;;
+	status)		__infrabot_status ;;
 	uninstall)	__infrabot_uninstall ;;
-	*)		__infrabot_install ;;
+	*)			__infrabot_install ;;
 esac
 exit 0
