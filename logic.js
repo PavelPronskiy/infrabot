@@ -6,7 +6,14 @@
 
 const VERSION = '0.1.5';
 
-require('dotenv').config();
+// require('dotenv').config();
+const dotenv = require('dotenv');
+const dotenvParseVariables = require('dotenv-parse-variables');
+
+let env = dotenv.config({});
+if (env.error) throw env.error;
+env = dotenvParseVariables(env.parsed);
+
 
 const stdio = require('stdio');
 const execSync = require('child_process').execSync;
@@ -15,11 +22,13 @@ const teleBotInstance = require('telebot');
 
 const hostname = execSync('hostname');
 
+// console.log(env);
+
 // telegram instance
 const telebot = new teleBotInstance({
 	token: process.env.MY_TOKEN,
 	pluginFolder: __dirname + '/modules/',
-	usePlugins: process.env.INFRABOT_PLUGINS,
+	usePlugins: env.INFRABOT_PLUGINS,
 	polling: {
 		interval: 1000,
 		timeout: 0,

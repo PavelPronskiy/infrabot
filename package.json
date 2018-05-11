@@ -12,6 +12,7 @@
     "avconv": "^3.1.0",
     "child_process": "^1.0.2",
     "dotenv": "^5.0.1",
+    "dotenv-parse-variables": "^0.1.0",
     "fs": "0.0.1-security",
     "ping": "^0.2.2",
     "pm2": "^2.10.3",
