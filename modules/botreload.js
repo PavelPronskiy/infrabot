@@ -20,7 +20,7 @@ module.exports = {
 		bot.on(['/reload'], function(msg) {
 
 			return childProcess.exec(config.nodeModulesBinPath + '/pm2 reload infrabot', function (error, stdout, stderr) {
-				var message = '``` ' + stdout + ' ```';
+				let message = '``` ' + stdout + ' ```' + "\n" + '```' + stderr + '```';
 				console.log(message);
 				bot.sendMessage(msg.chat.id, message, {
 					replyToMessage: msg.message_id,
