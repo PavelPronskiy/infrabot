@@ -59,7 +59,7 @@ function printInfraBotVersion() {
 function sendTelegramMessage(param) {
 
 	var momentjs = moment();
-	var timestamp = momentjs.format('YYYY-MM-DD HH:mm:ss Z');
+	var timestamp = momentjs.format('YYYY-MM-DD HH:mm:ss');
 
 	var sentParam = {
 		parseMode: 'Markdown'
@@ -69,7 +69,7 @@ function sendTelegramMessage(param) {
 		sentParam.replyToMessage = param.replyToMessage;
 	}
 
-	param.message = '`[' + timestamp + ']` ' + param.message;
+	param.message = '`[' + timestamp + ']` ' + "\n" + param.message;
 
 	// console.log(message);
 	return bot.sendMessage(param.chatID, param.message, sentParam);
