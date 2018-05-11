@@ -21,7 +21,7 @@ module.exports = {
 					'```' + uptime + '```',
 				chatID: msg.chat.id,
 				replyToMessage: msg.message_id
-			}).call(bot);
+			});
 		});
     }
 };

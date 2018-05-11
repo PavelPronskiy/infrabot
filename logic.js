@@ -69,10 +69,10 @@ function sendTelegramMessage(param) {
 		sentParam.replyToMessage = param.replyToMessage;
 	}
 
-	param.message = '[' + timestamp + '] ' + param.message;
+	param.message = '`[' + timestamp + ']` ' + param.message;
 
 	// console.log(message);
-	return this.sendMessage(param.chatID, param.message, sentParam);
+	return bot.sendMessage(param.chatID, param.message, sentParam);
 
 }
 
@@ -84,7 +84,7 @@ function printTelebotHelp(msg) {
 	'/help' + "\n",
 		chatID: msg.chat.id,
 		replyToMessage: msg.message_id
-	}).call(bot);
+	});
 }
 
 bot.on(['/help'], function(msg) {
@@ -96,7 +96,7 @@ bot.on(['/version'], function(msg) {
 		message: printInfraBotVersion(),
 		chatID: msg.chat.id,
 		replyToMessage: msg.message_id
-	}).call(bot);
+	});
 });
 
 
@@ -112,7 +112,7 @@ switch(getopt.method) {
 			message: 'Host ' + '*' + hostname + '*' + ' reported: infrabot online' + "\n" +
 				'infrabot version: ' + VERSION,
 			chatID: env.CHAT_ID
-		}).call(bot);
+		});
 
 		bot.start();
 	break;

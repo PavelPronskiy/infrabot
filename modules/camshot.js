@@ -44,7 +44,7 @@ module.exports = {
 				message: message,
 				chatID: msg.chat.id,
 				replyToMessage: msg.message_id
-			}).call(bot);
+			});
 
 
 		});

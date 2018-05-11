@@ -32,7 +32,7 @@ module.exports = {
 							'```' + res.output + '```',
 						chatID: msg.chat.id,
 						replyToMessage: msg.message_id
-					}).call(bot);
+					});
 				});
 			} else {
 				return sendTelegramMessage({
@@ -40,7 +40,7 @@ module.exports = {
 						'``` please use: /ping targethost {countNumber}```',
 					chatID: msg.chat.id,
 					replyToMessage: msg.message_id
-				}).call(bot);
+				});
 			}
 		});
 	}

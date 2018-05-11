@@ -32,7 +32,7 @@ module.exports = {
 								message: '``` ' + stdout + ' ```',
 								chatID: msg.chat.id,
 								replyToMessage: msg.message_id
-							}).call(bot);
+							});
 						}, {
 							stdio: 'inherit',
 							cwd: config.basePath
@@ -49,7 +49,7 @@ module.exports = {
 										message: '``` ' + stdout + ' ```',
 										chatID: msg.chat.id,
 										replyToMessage: msg.message_id
-									}).call(bot);
+									});
 								}, {
 									stdio: 'inherit',
 									cwd: config.basePath
@@ -59,7 +59,7 @@ module.exports = {
 									message: '``` ' + stdout + ' ```',
 									chatID: msg.chat.id,
 									replyToMessage: msg.message_id
-								}).call(bot);
+								});
 							}
 						}, {
 							stdio: 'inherit',
