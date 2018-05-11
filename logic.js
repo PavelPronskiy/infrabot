@@ -50,8 +50,6 @@ const getopt = stdio.getopt({
 });
 
 // timestamp
-var momentjs = moment();
-var momentjsTimestamp = momentjs.format('YYYY-MM-DD HH:mm:ss Z');
 
 function printInfraBotVersion() {
 	var message = 'InfraBot installed version: ' + VERSION;
@@ -60,6 +58,9 @@ function printInfraBotVersion() {
 
 function sendTelegramMessage(param) {
 
+	var momentjs = moment();
+	var timestamp = momentjs.format('YYYY-MM-DD HH:mm:ss Z');
+	
 	var sentParam = {
 		parseMode: 'Markdown'
 	};
@@ -67,6 +68,8 @@ function sendTelegramMessage(param) {
 	if (param.replyToMessage) {
 		sentParam.replyToMessage = param.replyToMessage;
 	}
+
+	param.message = '[' + timestamp + '] ' + param.message;
 
 	// console.log(message);
 	return this.sendMessage(param.chatID, param.message, sentParam);
