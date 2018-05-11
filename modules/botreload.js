@@ -20,20 +20,12 @@ module.exports = {
 		bot.on(['/reload'], function(msg) {
 
 			return childProcess.exec(config.nodeModulesBinPath + '/pm2 reload infrabot', function (error, stdout, stderr) {
-				let message = '``` ' + stdout + ' ```';
-				console.log(message);
-
-				var sentParam = {
-					message: message,
+				sendTelegramMessage({
+					message: '``` ' + stdout + ' ```',
 					chatID: msg.chat.id,
 					replyToMessage: msg.message_id
-				};
+				}).call(bot);
 
-				sendTelegramMessage(sentParam).call(bot);
-				bot.sendMessage(msg.chat.id, message, {
-					replyToMessage: msg.message_id,
-					parseMode: 'Markdown'
-				});
 			}, {
 				stdio: 'inherit',
 				cwd: config.basePath

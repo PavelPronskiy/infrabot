@@ -4,7 +4,7 @@
  *
  */
 
-const VERSION = '0.1.5.3';
+const VERSION = '0.1.5.4';
 
 // require('dotenv').config();
 const dotenv = require('dotenv');
