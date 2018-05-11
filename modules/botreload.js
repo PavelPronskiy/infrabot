@@ -29,7 +29,7 @@ module.exports = {
 					replyToMessage: msg.message_id
 				};
 
-				sendTelegramMessage(bot, sentParam);
+				sendTelegramMessage(sentParam).call(bot);
 				bot.sendMessage(msg.chat.id, message, {
 					replyToMessage: msg.message_id,
 					parseMode: 'Markdown'

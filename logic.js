@@ -4,7 +4,7 @@
  *
  */
 
-const VERSION = '0.1.5.2';
+const VERSION = '0.1.5.3';
 
 // require('dotenv').config();
 const dotenv = require('dotenv');
@@ -58,7 +58,7 @@ function printInfraBotVersion() {
 	return message;
 }
 
-function sendTelegramMessage(bot, param) {
+function sendTelegramMessage(param) {
 
 	var sentParam = {
 		parseMode: 'Markdown'
@@ -69,7 +69,7 @@ function sendTelegramMessage(bot, param) {
 	}
 
 	// console.log(message);
-	return bot.sendMessage(param.chatID, param.message, sentParam);
+	return this.sendMessage(param.chatID, param.message, sentParam);
 
 }
 
