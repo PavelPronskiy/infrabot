@@ -27,12 +27,12 @@ module.exports = {
 				switch(method[1]) {
 					case 'status':
 
-						childProcess.exec('bash ./setup.sh status', function (error, stdout, stderr) {
-							var message = '``` ' + stdout + ' ```';
-							return bot.sendMessage(msg.chat.id, message, {
-								replyToMessage: msg.message_id,
-								parseMode: 'Markdown'
-							});
+						return childProcess.exec('bash ./setup.sh status', function (error, stdout, stderr) {
+							sendTelegramMessage({
+								message: '``` ' + stdout + ' ```',
+								chatID: msg.chat.id,
+								replyToMessage: msg.message_id
+							}).call(bot);
 						}, {
 							stdio: 'inherit',
 							cwd: config.basePath
@@ -44,23 +44,23 @@ module.exports = {
 
 							if (stdout.match(/New infrabot version/g)) {
 								return childProcess.exec(config.nodeModulesBinPath + '/pm2 reload infrabot', function (error, stdout, stderr) {
-									var cmessage = '``` ' + stdout + ' ```';
 									console.log('infrabot process reloaded');
-									bot.sendMessage(msg.chat.id, cmessage, {
-										replyToMessage: msg.message_id,
-										parseMode: 'Markdown'
-									});
+									sendTelegramMessage({
+										message: '``` ' + stdout + ' ```',
+										chatID: msg.chat.id,
+										replyToMessage: msg.message_id
+									}).call(bot);
 								}, {
 									stdio: 'inherit',
 									cwd: config.basePath
 								});
+							} else {
+								return sendTelegramMessage({
+									message: '``` ' + stdout + ' ```',
+									chatID: msg.chat.id,
+									replyToMessage: msg.message_id
+								}).call(bot);
 							}
-
-							var message = '``` ' + stdout + ' ```';
-							return bot.sendMessage(msg.chat.id, message, {
-								replyToMessage: msg.message_id,
-								parseMode: 'Markdown'
-							});
 						}, {
 							stdio: 'inherit',
 							cwd: config.basePath

@@ -4,7 +4,7 @@
  *
  */
 
-const VERSION = '0.1.5.4';
+const VERSION = '0.1.5.5';
 
 // require('dotenv').config();
 const dotenv = require('dotenv');
@@ -26,7 +26,7 @@ const hostname = execSync('hostname');
 // console.log(env);
 
 // telegram instance
-const telebot = new teleBotInstance({
+const bot = new teleBotInstance({
 	token: env.MY_TOKEN,
 	pluginFolder: __dirname + '/modules/',
 	usePlugins: env.INFRABOT_PLUGINS,
@@ -60,7 +60,7 @@ function sendTelegramMessage(param) {
 
 	var momentjs = moment();
 	var timestamp = momentjs.format('YYYY-MM-DD HH:mm:ss Z');
-	
+
 	var sentParam = {
 		parseMode: 'Markdown'
 	};
@@ -77,28 +77,26 @@ function sendTelegramMessage(param) {
 }
 
 function printTelebotHelp(msg) {
-
-	var message = "\n" +
+	return sendTelegramMessage({
+		message: "\n" +
 	'/uptime - get uptime' + "\n" +
 	'/ping google.com - ping target host' + "\n" +
-	'/help' + "\n";
-
-	return telebot.sendMessage(msg.chat.id, message, {
-		replyToMessage: msg.message_id,
-		parseMode: 'Markdown'
-	});
+	'/help' + "\n",
+		chatID: msg.chat.id,
+		replyToMessage: msg.message_id
+	}).call(bot);
 }
 
-telebot.on(['/help'], function(msg) {
+bot.on(['/help'], function(msg) {
 	return printTelebotHelp(msg);
 });
 
-telebot.on(['/version'], function(msg) {
-	var message = printInfraBotVersion();
-	return telebot.sendMessage(msg.chat.id, message, {
-		replyToMessage: msg.message_id,
-		parseMode: 'Markdown'
-	});
+bot.on(['/version'], function(msg) {
+	return sendTelegramMessage({
+		message: printInfraBotVersion(),
+		chatID: msg.chat.id,
+		replyToMessage: msg.message_id
+	}).call(bot);
 });
 
 
@@ -110,15 +108,13 @@ if (typeof getopt.method === 'undefined') {
 
 switch(getopt.method) {
 	case 'run':
-		var message = 'Host ' + '*' + hostname + '*' + ' reported: infrabot online' + "\n" +
-			'infrabot version: ' + VERSION;
+		sendTelegramMessage({
+			message: 'Host ' + '*' + hostname + '*' + ' reported: infrabot online' + "\n" +
+				'infrabot version: ' + VERSION,
+			chatID: env.CHAT_ID
+		}).call(bot);
 
-		telebot.sendMessage(env.CHAT_ID, message, {
-			parseMode: 'Markdown'
-		});
-
-		console.log(message);
-		telebot.start();
+		bot.start();
 	break;
 	default: getopt.printHelp();
 }

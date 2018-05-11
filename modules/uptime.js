@@ -15,12 +15,13 @@ module.exports = {
 		bot.on(['/uptime'], function(msg) {
 			let uptime = execSync('uptime');
 			let hostname = execSync('hostname');
-			let message = '*' + 'report ' + hostname + '*' +
-			'```' + uptime + '```';
-			return bot.sendMessage(msg.chat.id, message, {
-				replyToMessage: msg.message_id,
-				parseMode: 'Markdown'
-			});
+
+			return sendTelegramMessage({
+				message: '*' + 'report ' + hostname + '*' +
+					'```' + uptime + '```',
+				chatID: msg.chat.id,
+				replyToMessage: msg.message_id
+			}).call(bot);
 		});
     }
 };

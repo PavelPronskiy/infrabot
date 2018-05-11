@@ -21,27 +21,26 @@ module.exports = {
 				timeout: 2,
 				extra: [ '-c', pingIterate ]
 			};
-			
+
 			if (targetHost) {
 				ping.promise.probe(targetHost, pingOptions).then(function(res){
-					message = (res.alive)
+					return sendTelegramMessage({
+						message: (res.alive)
 						? '*Host is online: ' + res.host + '*' + "\n"  +
 							'```' + res.output + '```'
 						: '*Host is down: ' + res.host + '*' + "\n"  +
-							'```' + res.output + '```';
-							
-					return bot.sendMessage(msg.chat.id, message, {
-						replyToMessage: msg.message_id,
-						parseMode: 'Markdown'
-					});
+							'```' + res.output + '```',
+						chatID: msg.chat.id,
+						replyToMessage: msg.message_id
+					}).call(bot);
 				});
 			} else {
-				message = 'Host ' + '*' + hostname + '*' + ' reported:' + "\n" +
-				'``` please use: /ping targethost {countNumber}```';
-				return bot.sendMessage(msg.chat.id, message, {
-					replyToMessage: msg.message_id,
-					parseMode: 'Markdown'
-				});
+				return sendTelegramMessage({
+					message: 'Host ' + '*' + hostname + '*' + ' reported:' + "\n" +
+						'``` please use: /ping targethost {countNumber}```',
+					chatID: msg.chat.id,
+					replyToMessage: msg.message_id
+				}).call(bot);
 			}
 		});
 	}

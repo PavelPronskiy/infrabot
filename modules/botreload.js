@@ -18,19 +18,16 @@ module.exports = {
 		// var pm2 = require('pm2');
 
 		bot.on(['/reload'], function(msg) {
-
 			return childProcess.exec(config.nodeModulesBinPath + '/pm2 reload infrabot', function (error, stdout, stderr) {
 				sendTelegramMessage({
 					message: '``` ' + stdout + ' ```',
 					chatID: msg.chat.id,
 					replyToMessage: msg.message_id
 				}).call(bot);
-
 			}, {
 				stdio: 'inherit',
 				cwd: config.basePath
 			});
-
 		});
     }
 };

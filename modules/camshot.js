@@ -40,11 +40,13 @@ module.exports = {
 				cwd: config.basePath
 			});*/
 
+			return sendTelegramMessage({
+				message: message,
+				chatID: msg.chat.id,
+				replyToMessage: msg.message_id
+			}).call(bot);
 
-			return bot.sendMessage(msg.chat.id, message, {
-				replyToMessage: msg.message_id,
-				parseMode: 'Markdown'
-			});
+
 		});
     }
 };
