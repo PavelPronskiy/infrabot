@@ -20,8 +20,16 @@ module.exports = {
 		bot.on(['/reload'], function(msg) {
 
 			return childProcess.exec(config.nodeModulesBinPath + '/pm2 reload infrabot', function (error, stdout, stderr) {
-				let message = '``` ' + stdout + ' ```' + "\n" + '```' + stderr + '```';
+				let message = '``` ' + stdout + ' ```';
 				console.log(message);
+
+				var sentParam = {
+					message: message,
+					chatID: msg.chat.id,
+					replyToMessage: msg.message_id
+				};
+
+				sendTelegramMessage(bot, sentParam);
 				bot.sendMessage(msg.chat.id, message, {
 					replyToMessage: msg.message_id,
 					parseMode: 'Markdown'

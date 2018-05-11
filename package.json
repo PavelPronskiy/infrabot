@@ -14,6 +14,7 @@
     "dotenv": "^5.0.1",
     "dotenv-parse-variables": "^0.1.0",
     "fs": "0.0.1-security",
+    "moment": "^2.22.1",
     "ping": "^0.2.2",
     "pm2": "^2.10.3",
     "request": "^2.85.0",

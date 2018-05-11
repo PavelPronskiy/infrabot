@@ -4,7 +4,7 @@
  *
  */
 
-const VERSION = '0.1.5.1';
+const VERSION = '0.1.5.2';
 
 // require('dotenv').config();
 const dotenv = require('dotenv');
@@ -14,6 +14,7 @@ let env = dotenv.config({});
 if (env.error) throw env.error;
 env = dotenvParseVariables(env.parsed);
 
+const moment = require('moment');
 
 const stdio = require('stdio');
 const execSync = require('child_process').execSync;
@@ -26,7 +27,7 @@ const hostname = execSync('hostname');
 
 // telegram instance
 const telebot = new teleBotInstance({
-	token: process.env.MY_TOKEN,
+	token: env.MY_TOKEN,
 	pluginFolder: __dirname + '/modules/',
 	usePlugins: env.INFRABOT_PLUGINS,
 	polling: {
@@ -34,7 +35,7 @@ const telebot = new teleBotInstance({
 		timeout: 0,
 		limit: 100,
 		retryTimeout: 5000,
-		proxy: process.env.PROXY_ADDR
+		proxy: env.PROXY_ADDR
 	}
 });
 
@@ -48,9 +49,28 @@ const getopt = stdio.getopt({
 	}
 });
 
+// timestamp
+var momentjs = moment();
+var momentjsTimestamp = momentjs.format('YYYY-MM-DD HH:mm:ss Z');
+
 function printInfraBotVersion() {
 	var message = 'InfraBot installed version: ' + VERSION;
 	return message;
+}
+
+function sendTelegramMessage(bot, param) {
+
+	var sentParam = {
+		parseMode: 'Markdown'
+	};
+
+	if (param.replyToMessage) {
+		sentParam.replyToMessage = param.replyToMessage;
+	}
+
+	// console.log(message);
+	return bot.sendMessage(param.chatID, param.message, sentParam);
+
 }
 
 function printTelebotHelp(msg) {
@@ -90,7 +110,7 @@ switch(getopt.method) {
 		var message = 'Host ' + '*' + hostname + '*' + ' reported: infrabot online' + "\n" +
 			'infrabot version: ' + VERSION;
 
-		telebot.sendMessage(process.env.CHAT_ID, message, {
+		telebot.sendMessage(env.CHAT_ID, message, {
 			parseMode: 'Markdown'
 		});
 
