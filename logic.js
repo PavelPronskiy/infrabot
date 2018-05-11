@@ -25,6 +25,26 @@ const hostname = execSync('hostname');
 
 // console.log(env);
 
+module.exports = sendTelegramMessage = function(param) {
+
+	var momentjs = moment();
+	var timestamp = momentjs.format('YYYY-MM-DD HH:mm:ss');
+
+	var sentParam = {
+		parseMode: 'Markdown'
+	};
+
+	if (param.replyToMessage) {
+		sentParam.replyToMessage = param.replyToMessage;
+	}
+
+	param.message = '`[' + timestamp + ']` ' + "\n" + param.message;
+
+	// console.log(message);
+	return bot.sendMessage(param.chatID, param.message, sentParam);
+
+};
+
 // telegram instance
 const bot = new teleBotInstance({
 	token: env.MY_TOKEN,
@@ -56,25 +76,7 @@ function printInfraBotVersion() {
 	return message;
 }
 
-function sendTelegramMessage(param) {
 
-	var momentjs = moment();
-	var timestamp = momentjs.format('YYYY-MM-DD HH:mm:ss');
-
-	var sentParam = {
-		parseMode: 'Markdown'
-	};
-
-	if (param.replyToMessage) {
-		sentParam.replyToMessage = param.replyToMessage;
-	}
-
-	param.message = '`[' + timestamp + ']` ' + "\n" + param.message;
-
-	// console.log(message);
-	return bot.sendMessage(param.chatID, param.message, sentParam);
-
-}
 
 function printTelebotHelp(msg) {
 	return sendTelegramMessage({
