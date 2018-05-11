@@ -26,7 +26,8 @@ module.exports = {
 		bot.on(['/camshot'], function(msg) {
 			// let hostname = execSync('hostname');
 			// let message = '*' + 'report ' + hostname + '*' + '```' + uptime + '```';
-			var message = INFRABOT_PLUGINS;
+			// var message = INFRABOT_PLUGINS;
+			var message = '31231';
 
 			/*childProcess.exec('bash ./setup.sh status', function (error, stdout, stderr) {
 				var message = '``` ' + stdout + ' ```';
