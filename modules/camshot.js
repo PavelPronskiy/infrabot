@@ -27,10 +27,6 @@ module.exports = {
 			// let hostname = execSync('hostname');
 			// let message = '*' + 'report ' + hostname + '*' + '```' + uptime + '```';
 			var message = INFRABOT_PLUGINS;
-			return bot.sendMessage(msg.chat.id, message, {
-				replyToMessage: msg.message_id,
-				parseMode: 'Markdown'
-			});
 
 			/*childProcess.exec('bash ./setup.sh status', function (error, stdout, stderr) {
 				var message = '``` ' + stdout + ' ```';
