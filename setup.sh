@@ -5,9 +5,6 @@ BASE_DIR="/opt/infrabot"
 INFRABOT_DIR="${BASE_DIR}/infrabot"
 ARCH=$(uname -m)
 
-NODEJS_ARCH="x64"
-# NODEJS_VER="v10.0.0"
-# NODEJS_VER_LATEST="v10.x"
 NODEJS_LATEST="https://nodejs.org/dist/latest"
 
 export PATH="${PATH}:${INFRABOT_DIR}/bin:${INFRABOT_DIR}/node_modules/.bin"
@@ -52,10 +49,12 @@ function __infrabot_install() {
 		exit 1
 	fi
 
+	local N_ARCH
+
 	case "${ARCH}" in
-		x86_64) ARCH="x64" ;;
-		armv7l) ARCH="armv7l" ;;
-		armv6l) ARCH="armv6l" ;;
+		x86_64) N_ARCH="x64" ;;
+		armv7l) N_ARCH="armv7l" ;;
+		armv6l) N_ARCH="armv6l" ;;
 		*)
 			echo "Cannot identify your cpu architecture"
 			exit 1
@@ -80,7 +79,7 @@ function __infrabot_install() {
 	then
 		echo "nodejs not found"
 		echo "Get latest version nodejs"
-		get_latest_ver=$(wget -qO- ${NODEJS_LATEST} | grep -oP "(?<=<a href=\").*linux-${ARCH}.tar.xz(?=\">)")
+		get_latest_ver=$(wget -qO- ${NODEJS_LATEST} | grep -oP "(?<=<a href=\").*linux-${N_ARCH}.tar.xz(?=\">)")
 		get_latest_verion_url=${NODEJS_LATEST}/${get_latest_ver}
 
 		mkdir -p ${INFRABOT_DIR}/node/ \
