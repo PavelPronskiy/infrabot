@@ -6,77 +6,67 @@
 
 module.exports = {
 
-    id: 'botupdate',
-    defaultConfig: {
-    	basePath: '/opt/infrabot/infrabot',
-    	nodeModulesBinPath: './node_modules/.bin'
-    },
+	id: 'botupdate',
+	defaultConfig: {
+		basePath: '/opt/infrabot/infrabot',
+		nodeModulesBinPath: './node_modules/.bin',
+		printHelp: '/update status -- get status' +
+			'/update now -- get update and install'
+	},
 
-    plugin(bot, config) {
+	plugin(bot, config) {
 		// var execSync = require('child_process').execSync;
 		const childProcess = require('child_process');
 		// var pm2 = require('pm2');
-
 		bot.on(['/update'], function(msg) {
 			
 			// var hostname = execSync('hostname');
 			var method = msg.text.split(' ');
 			var updateResult = 'No results.';
 
-			if (method[1]) {
+			if (typeof method[1] != 'undefined') {
 				switch(method[1]) {
 					case 'status':
-
-						return childProcess.exec('bash ./setup.sh status', function (error, stdout, stderr) {
-							sendTelegramMessage({
-								message: '``` ' + stdout + ' ```',
-								chatID: msg.chat.id,
-								replyToMessage: msg.message_id
+						bot.sendMessage(msg.chat.id, 'Check new updates...').then(re => {
+							childProcess.exec('bash ./setup.sh status', function (error, stdout, stderr) {
+								return updateAfterStatus(msg.chat.id, re.message_id, stdout);
+							}, {
+								stdio: 'inherit',
+								cwd: config.basePath
 							});
-						}, {
-							stdio: 'inherit',
-							cwd: config.basePath
 						});
-
 					break;
 					case 'now':
-
-						sendTelegramMessage({
-							message: 'Get new update...',
-							chatID: msg.chat.id,
-							replyToMessage: msg.message_id
+						bot.sendMessage(msg.chat.id, 'Get new updates...').then(re => {
+							console.log('Updating software');
+							childProcess.exec('bash ./setup.sh update', function (error, stdout, stderr) {
+								if (stdout.match(/New infrabot version/g)) {
+									updateAfterStatus(msg.chat.id, re.message_id, stdout);
+									return process.exit(0);
+								} else {
+									return updateAfterStatus(msg.chat.id, re.message_id, stdout);
+								}
+							}, {
+								stdio: 'inherit',
+								cwd: config.basePath
+							});
 						});
-
-						childProcess.exec('bash ./setup.sh update', function (error, stdout, stderr) {
-
-							if (stdout.match(/New infrabot version/g)) {
-
-								bot.editMessageText({ msg.from.id, msg.message_id }, `${ stdout }`, { parseMode: 'Markdown'	}).catch(error => console.log('Error:', error));
-
-								return process.exit(0);
-								/*return childProcess.exec(config.nodeModulesBinPath + '/pm2 reload infrabot', function (error, stdout, stderr) {
-									console.log('infrabot process reloaded');
-									sendTelegramMessage({
-										message: '``` ' + stdout + ' ```',
-										chatID: msg.chat.id,
-										replyToMessage: msg.message_id
-									});
-								}, {
-									stdio: 'inherit',
-									cwd: config.basePath
-								});*/
-							} else {
-
-								return bot.editMessageText({ msg.from.id, msg.message_id }, `${ stdout }`, { parseMode: 'Markdown' }).catch(error => console.log('Error:', error));
-							}
-						}, {
-							stdio: 'inherit',
-							cwd: config.basePath
-						});
-
 					break;
 				}
+			} else {
+				return sendTelegramMessage({
+					message: config.printHelp,
+					chatID: msg.chat.id,
+					replyToMessage: msg.message_id
+				});
 			}
 		});
-    }
+
+		function updateAfterStatus(chatId, messageId, stdout) {
+			return bot.editMessageText(
+				{chatId, messageId}, `${ stdout }`,
+				{parseMode: 'Markdown'}
+			).catch(error => console.log('Error:', error));
+		}
+	}
 };

@@ -18,8 +18,9 @@ function __infrabot_update() {
 		echo "New infrabot version: ${version}" || \
 		echo "No new updates found"
 
-	echo "Check npm packages updates"
+	# echo "Check npm packages updates"
 	LANG=C npm update
+	LANG=C npm dedupe
 
 	return 0
 }
