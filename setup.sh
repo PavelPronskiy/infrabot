@@ -1,10 +1,15 @@
 #!/bin/bash
 
-BASE_DIR="${BASE_DIR}"
+
+BASE_DIR="/opt/infrabot"
+INFRABOT_DIR="${BASE_DIR}/infrabot"
 ARCH=$(uname -m)
 
 NODEJS_ARCH="x64"
 NODEJS_VER="v10.0.0"
+NODEJS_VER_LATEST="v10.x"
+
+export PATH="${PATH}:${INFRABOT_DIR}/bin:${INFRABOT_DIR}/node_modules/.bin"
 
 function __infrabot_update() {
 	local version=$(grep 'const VERSION.*' logic.js | awk '{print $4}' | sed "s|'||g;s|;||g")
@@ -45,31 +50,39 @@ function __infrabot_install() {
 	esac
 
 	id infrabot > /dev/null 2>&1 || useradd -d ${BASE_DIR} infrabot
-	cd ${BASE_DIR}
+	cd ${BASE_DIR}/
 	git clone https://github.com/PavelPronskiy/infrabot.git
 
-	if [ ! -d "${BASE_DIR}/infrabot" ]
+	if [ ! -d "${INFRABOT_DIR}" ]
 	then
-			echo "${BASE_DIR}/infrabot directory not found"
+			echo "${INFRABOT_DIR} directory not found"
 			exit 1
 	fi
 
-	cd infrabot/
-	mkdir -p node/ bin/ log/
-	cd node/
-	echo "Installing nodejs ${NODEJS_VER}"
-	wget -qO- https://nodejs.org/dist/latest-v10.x/node-v10.0.0-linux-${NODEJS_ARCH}.tar.xz | tar Jx
-	ln -s $PWD/node-v10.0.0-linux-${NODEJS_ARCH}/bin/node ../bin/node
-	ln -s $PWD/node-v10.0.0-linux-${NODEJS_ARCH}/lib/node_modules/npm/bin/npm-cli.js ../bin/npm
-	ln -s $PWD/node-v10.0.0-linux-${NODEJS_ARCH}/lib/node_modules/npm/bin/npx-cli.js ../bin/npx
+	cd ${INFRABOT_DIR}
 
-	export PATH="${PATH}:${PWD_DIR}/bin"
+
+	node -v > /dev/null 2>&1
+	if [ $? == 127 ]
+	then
+		echo "nodejs not found"
+		mkdir -p ${INFRABOT_DIR}/node/ ${INFRABOT_DIR}/bin/ ${INFRABOT_DIR}/log/
+		cd ${INFRABOT_DIR}/node/
+		echo "Installing nodejs ver: ${NODEJS_VER}"
+		wget -qO- https://nodejs.org/dist/latest-${NODEJS_VER_LATEST}/node-${NODEJS_VER}-linux-${NODEJS_ARCH}.tar.xz | tar Jx
+		ln -s ${INFRABOT_DIR}/node/node-${NODEJS_VER}-linux-${NODEJS_ARCH}/bin/node ${INFRABOT_DIR}/bin/node
+		ln -s ${INFRABOT_DIR}/node/node-${NODEJS_VER}-linux-${NODEJS_ARCH}/lib/node_modules/npm/bin/npm-cli.js ${INFRABOT_DIR}/bin/npm
+		ln -s ${INFRABOT_DIR}/node/node-${NODEJS_VER}-linux-${NODEJS_ARCH}/lib/node_modules/npm/bin/npx-cli.js ${INFRABOT_DIR}/bin/npx
+	fi
+
 
 	# echo "${HOME}"
  	
-	cd ${BASE_DIR}/infrabot
+	cd ${INFRABOT_DIR}
 
+	npm update
 	npm install
+	npm dedupe
 	
 	cp -p .env.example .env
 
@@ -86,6 +99,7 @@ function __infrabot_install() {
 	cat .env
 	echo
 	echo "Need root privileges to execute generated pm2 autostart command line"
+
 	pm2 startup
 	echo
 	pm2 start apps.json
@@ -103,14 +117,13 @@ function __infrabot_install() {
 
 function __infrabot_uninstall() {
 	#id infrabot > /dev/null 2>&1 && userdel infrabot
-	[ -f "$PWD/bin/node" ] && rm -f $PWD/bin/node
-	[ -f "$PWD/bin/npm" ] && rm -f $PWD/bin/npm
-	[ -f "$PWD/bin/npx" ] && rm -f $PWD/bin/npx
-	[ -d "$PWD/node" ] && rm -rf $PWD/node
-	[ -d "$PWD/bin" ] && rm -rf $PWD/bin
-	[ -d "$PWD/node_modules" ] && rm -rf $PWD/node_modules
-	[ -d "$PWD/log" ] && rm -rf $PWD/log
-	[ -d "${PWD}/supervisord.d/infrabot.conf" ] && rm -rf ${PWD}/supervisord.d/infrabot.conf
+	[ -f "${INFRABOT_DIR}/bin/node" ] && rm -f ${INFRABOT_DIR}/bin/node
+	[ -f "${INFRABOT_DIR}/bin/npm" ] && rm -f ${INFRABOT_DIR}/bin/npm
+	[ -f "${INFRABOT_DIR}/bin/npx" ] && rm -f ${INFRABOT_DIR}/bin/npx
+	[ -d "${INFRABOT_DIR}/node" ] && rm -rf ${INFRABOT_DIR}/node
+	[ -d "${INFRABOT_DIR}/bin" ] && rm -rf ${INFRABOT_DIR}/bin
+	[ -d "${INFRABOT_DIR}/node_modules" ] && rm -rf ${INFRABOT_DIR}/node_modules
+	[ -d "${INFRABOT_DIR}/log" ] && rm -rf ${INFRABOT_DIR}/log
 	echo "Uninstall success"
 }
 
