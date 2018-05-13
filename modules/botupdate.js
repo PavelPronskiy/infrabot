@@ -40,10 +40,21 @@ module.exports = {
 
 					break;
 					case 'now':
+
+						sendTelegramMessage({
+							message: 'Get new update...',
+							chatID: msg.chat.id,
+							replyToMessage: msg.message_id
+						});
+
 						childProcess.exec('bash ./setup.sh update', function (error, stdout, stderr) {
 
 							if (stdout.match(/New infrabot version/g)) {
-								return childProcess.exec(config.nodeModulesBinPath + '/pm2 reload infrabot', function (error, stdout, stderr) {
+
+								bot.editMessageText({ msg.from.id, msg.message_id }, `${ stdout }`, { parseMode: 'Markdown'	}).catch(error => console.log('Error:', error));
+
+								return process.exit(0);
+								/*return childProcess.exec(config.nodeModulesBinPath + '/pm2 reload infrabot', function (error, stdout, stderr) {
 									console.log('infrabot process reloaded');
 									sendTelegramMessage({
 										message: '``` ' + stdout + ' ```',
@@ -53,13 +64,10 @@ module.exports = {
 								}, {
 									stdio: 'inherit',
 									cwd: config.basePath
-								});
+								});*/
 							} else {
-								return sendTelegramMessage({
-									message: '``` ' + stdout + ' ```',
-									chatID: msg.chat.id,
-									replyToMessage: msg.message_id
-								});
+
+								return bot.editMessageText({ msg.from.id, msg.message_id }, `${ stdout }`, { parseMode: 'Markdown' }).catch(error => console.log('Error:', error));
 							}
 						}, {
 							stdio: 'inherit',
