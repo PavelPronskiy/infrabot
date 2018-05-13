@@ -21,7 +21,6 @@ const execSync = require('child_process').execSync;
 const requestp = require('request-promise');
 const teleBotInstance = require('telebot');
 
-const hostname = execSync('hostname');
 
 // console.log(env);
 
@@ -61,7 +60,7 @@ module.exports = sendTelegramMessage = function(param) {
 		sentParam.replyToMessage = param.replyToMessage;
 	}
 
-	param.message = '`[' + timestamp + ']` ' + "\n" + param.message;
+	param.message = '🤘🏻 ' + param.message;
 
 	// console.log(message);
 	return bot.sendMessage(param.chatID, param.message, sentParam);
@@ -116,8 +115,11 @@ if (typeof getopt.method === 'undefined') {
 
 switch(getopt.method) {
 	case 'run':
+		var hostname = execSync('hostname');
+		// var momentjs = moment();
+		// var timestamp = momentjs.format('YYYY-MM-DD HH:mm:ss');
 		sendTelegramMessage({
-			message: 'Host ' + '*' + hostname + '*' + ' reported: infrabot online' + "\n" +
+			message: 'host ' + '*' + hostname + '*' + ' reported: infrabot online' + "\n" +
 				'infrabot version: ' + VERSION,
 			chatID: env.CHAT_ID
 		});
