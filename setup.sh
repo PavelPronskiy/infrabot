@@ -6,8 +6,9 @@ INFRABOT_DIR="${BASE_DIR}/infrabot"
 ARCH=$(uname -m)
 
 NODEJS_ARCH="x64"
-NODEJS_VER="v10.0.0"
-NODEJS_VER_LATEST="v10.x"
+# NODEJS_VER="v10.0.0"
+# NODEJS_VER_LATEST="v10.x"
+NODEJS_LATEST="https://nodejs.org/dist/latest"
 
 export PATH="${PATH}:${INFRABOT_DIR}/bin:${INFRABOT_DIR}/node_modules/.bin"
 
@@ -37,16 +38,30 @@ function __infrabot_status() {
 
 function __infrabot_install() {
 
-	which git > /dev/null 2>&1 || {
-		echo "Please install git"
+	git --version > /dev/null 2>&1
+	if [ $? == 127 ]
+	then
+		echo "Please install git software"
 		exit 1
-	}
+	fi
 
+	wget --version > /dev/null 2>&1
+	if [ $? == 127 ]
+	then
+		echo "Please install wget software"
+		exit 1
+	fi
+
+	local ARCH=""
 
 	case "${ARCH}" in
-		x86_64) NODEJS_ARCH="x64" ;;
-		armv7l) NODEJS_ARCH="armv7l" ;;
-		armv6l) NODEJS_ARCH="armv6l" ;;
+		x86_64) ARCH="x64" ;;
+		armv7l) ARCH="armv7l" ;;
+		armv6l) ARCH="armv6l" ;;
+		*)
+			echo "Cannot identify your cpu architecture"
+			exit 1
+		;;
 	esac
 
 	id infrabot > /dev/null 2>&1 || useradd -d ${BASE_DIR} infrabot
@@ -66,14 +81,29 @@ function __infrabot_install() {
 	if [ $? == 127 ]
 	then
 		echo "nodejs not found"
-		mkdir -p ${INFRABOT_DIR}/node/ ${INFRABOT_DIR}/bin/ ${INFRABOT_DIR}/log/
+		echo "Get latest version nodejs"
+		get_latest_ver=$(wget -qO- ${NODEJS_LATEST} | grep -oP "(?<=<a href=\").*linux-${ARCH}.tar.xz(?=\">)")
+		get_latest_verion_url=${NODEJS_LATEST}/${get_latest_ver}
+
+		mkdir -p ${INFRABOT_DIR}/node/ \
+				 ${INFRABOT_DIR}/bin/ \
+				 ${INFRABOT_DIR}/log/
+
 		cd ${INFRABOT_DIR}/node/
-		echo "Installing nodejs ver: ${NODEJS_VER}"
-		echo "https://nodejs.org/dist/latest-${NODEJS_VER_LATEST}/node-${NODEJS_VER}-linux-${NODEJS_ARCH}.tar.xz"
-		wget -qO- https://nodejs.org/dist/latest-${NODEJS_VER_LATEST}/node-${NODEJS_VER}-linux-${NODEJS_ARCH}.tar.xz | tar Jx
-		ln -s ${INFRABOT_DIR}/node/node-${NODEJS_VER}-linux-${NODEJS_ARCH}/bin/node ${INFRABOT_DIR}/bin/node
-		ln -s ${INFRABOT_DIR}/node/node-${NODEJS_VER}-linux-${NODEJS_ARCH}/lib/node_modules/npm/bin/npm-cli.js ${INFRABOT_DIR}/bin/npm
-		ln -s ${INFRABOT_DIR}/node/node-${NODEJS_VER}-linux-${NODEJS_ARCH}/lib/node_modules/npm/bin/npx-cli.js ${INFRABOT_DIR}/bin/npx
+		echo "Downloading latest nodejs version: ${get_latest_verion_url}"
+		wget -qO- ${get_latest_verion_url} | tar Jx
+		if [ $? != 0 ]
+		then
+			echo "Cannot download ${get_latest_verion_url}"
+			exit 1
+		fi
+
+		local node_path=$(ls ${INFRABOT_DIR}/node/ | grep 'node')
+		echo "Installing nodejs ver: ${get_latest_verion_url}"
+
+		ln -s ${INFRABOT_DIR}/node/${node_path}/bin/node ${INFRABOT_DIR}/bin/node
+		ln -s ${INFRABOT_DIR}/node/${node_path}/lib/node_modules/npm/bin/npm-cli.js ${INFRABOT_DIR}/bin/npm
+		ln -s ${INFRABOT_DIR}/node/${node_path}/lib/node_modules/npm/bin/npx-cli.js ${INFRABOT_DIR}/bin/npx
 	fi
 
 
