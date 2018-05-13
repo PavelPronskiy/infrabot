@@ -15,8 +15,8 @@ function __infrabot_update() {
 	LANG=C git fetch && \
 	LANG=C git status | grep -q 'Your branch is behind' && \
 	git merge && \
-		echo "New infrabot version: ${version}" || \
-		echo "No new updates found"
+		echo "+ New infrabot version: ${version}" || \
+		echo "- No new updates found"
 
 	# echo "Check npm packages updates"
 	LANG=C npm update
@@ -28,8 +28,8 @@ function __infrabot_update() {
 function __infrabot_status() {
 	git fetch > /dev/null
 	git status | grep -q 'Your branch is behind' && \
-		echo "Found new updates!" || \
-		echo "No new updates found."
+		echo "+ Found new updates!" || \
+		echo "- No new updates found."
 
 	return 0
 }
@@ -39,14 +39,14 @@ function __infrabot_install() {
 	git --version > /dev/null 2>&1
 	if [ $? == 127 ]
 	then
-		echo "Please install git software"
+		echo "!! Please install git software"
 		exit 1
 	fi
 
 	wget --version > /dev/null 2>&1
 	if [ $? == 127 ]
 	then
-		echo "Please install wget software"
+		echo "!! Please install wget software"
 		exit 1
 	fi
 
