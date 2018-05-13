@@ -69,6 +69,7 @@ function __infrabot_install() {
 		mkdir -p ${INFRABOT_DIR}/node/ ${INFRABOT_DIR}/bin/ ${INFRABOT_DIR}/log/
 		cd ${INFRABOT_DIR}/node/
 		echo "Installing nodejs ver: ${NODEJS_VER}"
+		echo "https://nodejs.org/dist/latest-${NODEJS_VER_LATEST}/node-${NODEJS_VER}-linux-${NODEJS_ARCH}.tar.xz"
 		wget -qO- https://nodejs.org/dist/latest-${NODEJS_VER_LATEST}/node-${NODEJS_VER}-linux-${NODEJS_ARCH}.tar.xz | tar Jx
 		ln -s ${INFRABOT_DIR}/node/node-${NODEJS_VER}-linux-${NODEJS_ARCH}/bin/node ${INFRABOT_DIR}/bin/node
 		ln -s ${INFRABOT_DIR}/node/node-${NODEJS_VER}-linux-${NODEJS_ARCH}/lib/node_modules/npm/bin/npm-cli.js ${INFRABOT_DIR}/bin/npm
