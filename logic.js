@@ -25,6 +25,29 @@ const hostname = execSync('hostname');
 
 // console.log(env);
 
+
+// telegram instance
+const bot = new teleBotInstance({
+	token: env.MY_TOKEN,
+	pluginFolder: __dirname + '/modules/',
+	usePlugins: env.INFRABOT_PLUGINS,
+	polling: {
+		interval: (typeof env.INFRABOT_POLLING_INTERVAL != 'undefined') ?
+			env.INFRABOT_POLLING_INTERVAL :
+			10000,
+		timeout: (typeof env.INFRABOT_POLLING_TIMEOUT != 'undefined') ?
+			env.INFRABOT_POLLING_TIMEOUT :
+			0,
+		limit: (typeof env.INFRABOT_POLLING_LIMIT != 'undefined') ?
+			env.INFRABOT_POLLING_LIMIT :
+			100,
+		retryTimeout: (typeof env.INFRABOT_POLLING_RETRYTIMEOUT != 'undefined') ?
+			env.INFRABOT_POLLING_RETRYTIMEOUT :
+			5000,
+		proxy: env.PROXY_ADDR
+	}
+});
+
 module.exports = sendTelegramMessage = function(param) {
 
 	var momentjs = moment();
@@ -45,20 +68,6 @@ module.exports = sendTelegramMessage = function(param) {
 
 };
 
-// telegram instance
-const bot = new teleBotInstance({
-	token: env.MY_TOKEN,
-	pluginFolder: __dirname + '/modules/',
-	usePlugins: env.INFRABOT_PLUGINS,
-	polling: {
-		interval: 1000,
-		timeout: 0,
-		limit: 100,
-		retryTimeout: 5000,
-		proxy: env.PROXY_ADDR
-	}
-});
-
 // cli params
 const getopt = stdio.getopt({
 	method: {
@@ -70,13 +79,10 @@ const getopt = stdio.getopt({
 });
 
 // timestamp
-
 function printInfraBotVersion() {
 	var message = 'InfraBot installed version: ' + VERSION;
 	return message;
 }
-
-
 
 function printTelebotHelp(msg) {
 	return sendTelegramMessage({

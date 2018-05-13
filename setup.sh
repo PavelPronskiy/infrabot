@@ -87,7 +87,7 @@ function __infrabot_install() {
 				 ${INFRABOT_DIR}/log/
 
 		cd ${INFRABOT_DIR}/node/
-		echo "Downloading latest nodejs version: ${get_latest_verion_url}"
+		echo "Downloading latest nodejs ${get_latest_verion_url}"
 		wget -qO- ${get_latest_verion_url} | tar Jx
 		if [ $? != 0 ]
 		then
@@ -96,7 +96,8 @@ function __infrabot_install() {
 		fi
 
 		local node_path=$(ls ${INFRABOT_DIR}/node/ | grep 'node')
-		echo "Installing nodejs ver: ${get_latest_verion_url}"
+		local node_ver=$(${INFRABOT_DIR}/node/${node_path}/bin/node -v)
+		echo "Installing nodejs version: ${node_ver}"
 
 		ln -s ${INFRABOT_DIR}/node/${node_path}/bin/node ${INFRABOT_DIR}/bin/node
 		ln -s ${INFRABOT_DIR}/node/${node_path}/lib/node_modules/npm/bin/npm-cli.js ${INFRABOT_DIR}/bin/npm
