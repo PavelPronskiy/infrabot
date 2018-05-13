@@ -52,8 +52,6 @@ function __infrabot_install() {
 		exit 1
 	fi
 
-	local ARCH=""
-
 	case "${ARCH}" in
 		x86_64) ARCH="x64" ;;
 		armv7l) ARCH="armv7l" ;;
