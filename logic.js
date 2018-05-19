@@ -4,11 +4,14 @@
  *
  */
 
-const VERSION = '0.1.5.7';
+const VERSION = '0.1.5.9';
 
 // require('dotenv').config();
 const dotenv = require('dotenv');
 const dotenvParseVariables = require('dotenv-parse-variables');
+
+const buf = new Buffer('BASIC=basic');
+const config = dotenv.parse(buf); // will return an object
 
 let env = dotenv.config({});
 if (env.error) throw env.error;
@@ -23,10 +26,7 @@ const teleBotInstance = require('telebot');
 
 
 // console.log(env);
-
-
-// telegram instance
-const bot = new teleBotInstance({
+const telebotSettings = {
 	token: env.MY_TOKEN,
 	pluginFolder: __dirname + '/modules/',
 	usePlugins: env.INFRABOT_PLUGINS,
@@ -42,10 +42,16 @@ const bot = new teleBotInstance({
 			100,
 		retryTimeout: (typeof env.INFRABOT_POLLING_RETRYTIMEOUT != 'undefined') ?
 			env.INFRABOT_POLLING_RETRYTIMEOUT :
-			5000,
-		proxy: env.PROXY_ADDR
+			5000
 	}
-});
+};
+
+if (env.PROXY_ADDR) {
+	telebotSettings.polling.proxy = env.PROXY_ADDR;
+}
+
+// telegram instance
+const bot = new teleBotInstance(telebotSettings);
 
 module.exports = sendTelegramMessage = function(param) {
 
